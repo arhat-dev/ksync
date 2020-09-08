@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-syncer-config
+data:
+  syncer-config.yaml: |
+    # requredDataKeys only update configmap/secret when all of its data
+    # with those keys has been updated
+    requiredDataKeys:
+    - foo
+    - bar
+
+    fetchers:
+    - method: mqtt
+      # requredDataKeys only send update for validation when all of the data
+      # with those keys has been updated
+      requiredDataKeys:
+      - foo
+      - bar
+      mqtt:
+        broker: mqtt-broker.mqtt.svc:8883
+        transport: tcp
+        username: example-user
+        password: mypassword
+        clientID: exmaple-id
+        version: "3.1.1"
+        keepaliveInterval: 60s
+        tls:
+          enabled: true
+          insecureSkipVerify: true
+        subscriptions:
+        - dataKey: foo
+          topic: datatroniq.com/ksync/foo
+          qos: 1
+        - dataKey: bar
+          topic: datatroniq.com/ksync/bar
+          qos: 2
+
+    validators:
+    - method: http
+      # dataKeys to validate
+      dataKeys:
+      - foo
+      - bar
+      http:
+        dryRun: false
+        requestBodyAsData: true
+        responseBodyAsData: false
+
+        request:
+          # url supports templating
+          url: http://localhost:9876/metrics
+          action: PUT
+          headers:
+          - name: foo
+            value: bar
+          - name: '{{- .DataKey -}}'
+            value: foo
+          - name: bar
+            value: '{{- .DataKey -}}'
+          body: |
+            {{- .Data | jqBytes ".msg" -}}
+          tls:
+            enabled: false
+        response:
+          body: |
+            {{- .Extra.Resp.Body | toString | jq ".msg" -}}
+        expect:
+          responseCode: 400

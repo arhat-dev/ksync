@@ -42,7 +42,7 @@ A Kubernetes config sync controller and workload reloader
   kubectl label {cm|secrets} <resource-name> ksync.arhat.dev/action="sync"
   ```
 
-- Create a config for config sync inside `ConfigMap`/`Secret` (please refer to [`config.sync.yaml`](./config.sync.yaml) for config example)
+- Create a config for config sync inside `ConfigMap`/`Secret` (please refer to [sample syncer config](./e2e/testdata/20-syncer-config.yaml) for example)
 
   ```bash
   kubectl create {cm|secrets general} <my-sync-config-name> --from-file config.sync.yaml

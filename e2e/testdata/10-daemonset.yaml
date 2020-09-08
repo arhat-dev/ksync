@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    ksync.datatroniq.com/action: reload
+  annotations:
+    ksync.datatroniq.com/configmaps: $(NODE_NAME)/$(NODE_NAME).yaml,foo
+    ksync.datatroniq.com/secrets: foo
+  name: example-ds-to-be-reloaded
+spec:
+  selector:
+    matchLabels:
+      app: example-ds-to-be-reloaded
+  template:
+    metadata:
+      labels:
+        app: example-ds-to-be-reloaded
+    spec:
+      containers:
+      - name: idle
+        image: docker.io/library/alpine:3.11
+        imagePullPolicy: IfNotPresent
+        command: [sh, -c]
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        args:
+        - sleep 3600

@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: foo
+stringData:
+  foo: bar
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: foo
+data:
+  foo: bar
+  bar: foo
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-node-1
+data:
+  kube-node-1.yaml: |
+    test: ok
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-node-2
+data:
+  kube-node-2.yaml: |
+    test: ok
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-node-3
+data:
+  kube-node-3.yaml: |
+    test: ok
