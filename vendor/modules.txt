@@ -97,7 +97,7 @@ github.com/json-iterator/go
 github.com/lestrrat-go/strftime
 # github.com/matttproud/golang_protobuf_extensions v1.0.1
 github.com/matttproud/golang_protobuf_extensions/pbutil
-# github.com/mitchellh/copystructure v1.0.0
+# github.com/mitchellh/copystructure v1.0.0 => github.com/mitchellh/copystructure v1.0.1-0.20200503165117-e980c1d41412
 github.com/mitchellh/copystructure
 # github.com/mitchellh/reflectwalk v1.0.0
 github.com/mitchellh/reflectwalk
@@ -644,6 +644,7 @@ sigs.k8s.io/structured-merge-diff/v3/value
 # sigs.k8s.io/yaml v1.2.0
 ## explicit
 sigs.k8s.io/yaml
+# github.com/mitchellh/copystructure => github.com/mitchellh/copystructure v1.0.1-0.20200503165117-e980c1d41412
 # k8s.io/api => github.com/kubernetes/api v0.18.8
 # k8s.io/apiextensions-apiserver => github.com/kubernetes/apiextensions-apiserver v0.18.8
 # k8s.io/apimachinery => github.com/kubernetes/apimachinery v0.18.8

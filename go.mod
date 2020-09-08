@@ -3,6 +3,7 @@ module arhat.dev/ksync
 go 1.15
 
 replace (
+	github.com/mitchellh/copystructure => github.com/mitchellh/copystructure v1.0.1-0.20200503165117-e980c1d41412
 	k8s.io/api => github.com/kubernetes/api v0.18.8
 	k8s.io/apiextensions-apiserver => github.com/kubernetes/apiextensions-apiserver v0.18.8
 	k8s.io/apimachinery => github.com/kubernetes/apimachinery v0.18.8
