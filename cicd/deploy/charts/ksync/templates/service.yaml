@@ -1,0 +1,17 @@
+{{- if .Values.config.ksync.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ksync.fullname" . }}-metrics
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: metrics
+    {{- include "ksync.labels" . | nindent 4 }}
+spec:
+  ports:
+  - name: metrics
+    port: {{ index (split ":" (default ":9876" .Values.config.ksync.metrics.listen)) "_1" }}
+    targetPort: metrics
+  selector:
+    {{- include "ksync.selectorLabels" . | nindent 4 }}
+{{- end }}

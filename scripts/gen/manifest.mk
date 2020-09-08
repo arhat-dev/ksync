@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-gen.manifests.template-kubernetes-controller:
+NS ?= default
+
+gen.manifests.ksync:
 	helm template \
-		template-kubernetes-controller \
-		cicd/deploy/charts/template-kubernetes-controller \
+		ksync \
+		cicd/deploy/charts/ksync \
 		--include-crds --namespace ${NS} --debug \
-		| tee cicd/deploy/kube/template-kubernetes-controller.yaml
+		| tee cicd/deploy/kube/ksync.yaml

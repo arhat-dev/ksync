@@ -1,22 +1,59 @@
-# Template Kubernetes Controller
+# ksync
 
-[![CI](https://github.com/arhat-dev/template-kubernetes-controller/workflows/CI/badge.svg)](https://github.com/arhat-dev/template-kubernetes-controller/actions?query=workflow%3ACI)
-[![PkgGoDev](https://pkg.go.dev/badge/arhat.dev/template-kubernetes-controller)](https://pkg.go.dev/arhat.dev/template-kubernetes-controller)
-[![GoReportCard](https://goreportcard.com/badge/arhat.dev/template-kubernetes-controller)](https://goreportcard.com/report/arhat.dev/template-kubernetes-controller)
-[![codecov](https://codecov.io/gh/arhat-dev/template-kubernetes-controller/branch/master/graph/badge.svg)](https://codecov.io/gh/arhat-dev/template-kubernetes-controller)
+[![CI](https://github.com/arhat-dev/ksync/workflows/CI/badge.svg)](https://github.com/arhat-dev/ksync/actions?query=workflow%3ACI)
+[![PkgGoDev](https://pkg.go.dev/badge/arhat.dev/ksync)](https://pkg.go.dev/arhat.dev/ksync)
+[![GoReportCard](https://goreportcard.com/badge/arhat.dev/ksync)](https://goreportcard.com/report/arhat.dev/ksync)
+[![codecov](https://codecov.io/gh/arhat-dev/ksync/branch/master/graph/badge.svg)](https://codecov.io/gh/arhat-dev/ksync)
 
-Template for a kubernetes controller
+A Kubernetes config sync controller and workload reloader
 
-## Make Targets
+## Features
 
-- binary build: `<comp>.{OS}.{ARCH}`
-- image build: `image.build.<comp>.{OS}.{ARCH}`
-- image push: `image.push.<comp>.{OS}.{ARCH}`
-- unit tests: `test.pkg`, `test.cmd`
-- e2e tests: `e2e.v1-16`, `e2e.v1-17`, `e2e.v1-18`
-- code generation:
-  - generate CRD: `gen.code.<crd group>.<crd version>` (to install required tools: `install.codegen`)
-  - generate manifests: `gen.manifests.<comp>`
+- [x] Fine-grained pod reload when config (`ConfigMap`, `Secret`) changed
+- [x] `ConfigMap`/`Secret` data sync
+
+## Usage: Reload
+
+- Label `Deployment`/`Daemonset`/`Statefulset` to get enable reload on config updated
+
+  ```bash
+  kubectl label {deploy|ds|sts} <resource-name> ksync.arhat.dev/action="reload"
+  ```
+
+- (Optional) Select configmaps to be managed, comma seperated name list (if not specified, all configmaps mounted in the pod can trigger reload)
+
+  ```bash
+  kubectl annotate {deploy|ds|sts} <resource-name> ksync.arhat.dev/configmaps="foo,bar"
+  ```
+
+- (Optional) Select secrets to be managed, comma seperated name list (if not specified, all secrets mounted in the pod can trigger reload)
+
+  ```bash
+  kubectl annotate {deploy|ds|sts} <resource-name> ksync.arhat.dev/secrets="foo,bar"
+  ```
+
+**NOTICE:** For more examples, please refer to manifests and guides in [test/testdata](./test/testdata)
+
+## Usage: Config Sync
+
+- Label `ConfigMap`/`Secret` for syncing
+
+  ```bash
+  kubectl label {cm|secrets} <resource-name> ksync.arhat.dev/action="sync"
+  ```
+
+- Create a config for config sync inside `ConfigMap`/`Secret` (please refer to [`config.sync.yaml`](./config.sync.yaml) for config example)
+
+  ```bash
+  kubectl create {cm|secrets general} <my-sync-config-name> --from-file config.sync.yaml
+  ```
+
+- Annotate the `ConfigMap`/`Secret` to be synced with the sync config just created (refered sync config will reload syncer automatically)
+
+  ```bash
+  # namespace is not requred if the sync config resource is in the same namespace with the one to be synced
+  kubectl annotate {cm|secrets} <resource-name> ksync.arhat.dev/sync-config-ref="{configmap|secret}://{ | <namespace>/}<name>/<key>"
+  ```
 
 ## LICENSE
 

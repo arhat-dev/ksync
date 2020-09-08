@@ -16,6 +16,10 @@ limitations under the License.
 
 package constant
 
+import "time"
+
 const (
-	DefaultTemplateKubernetesControllerConfigFile = "/etc/template-kubernetes-controller/config.yaml"
+	DefaultKsyncConfigFile = "/etc/ksync/config.yaml"
+
+	DefaultWorkloadReloadDelay = 5 * time.Second
 )

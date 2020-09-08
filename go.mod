@@ -1,4 +1,4 @@
-module arhat.dev/template-kubernetes-controller
+module arhat.dev/ksync
 
 go 1.15
 
@@ -33,11 +33,18 @@ replace (
 
 require (
 	arhat.dev/pkg v0.0.0-20200814094720-eac4d5d5680b
+	github.com/Masterminds/sprig/v3 v3.1.0
+	github.com/goiiot/libmqtt v0.9.5
+	github.com/itchyny/gojq v0.10.4
 	github.com/spf13/cobra v1.0.0
-	github.com/spf13/pflag v1.0.5
+	go.uber.org/multierr v1.5.0
+	golang.org/x/net v0.0.0-20191004110552-13f9640d40b9
 	gopkg.in/yaml.v2 v2.2.8
+	gopkg.in/yaml.v3 v3.0.0-20200605160147-a5ece683394c
 	k8s.io/api v0.18.8
 	k8s.io/apimachinery v0.18.8
 	k8s.io/client-go v0.18.8
+	k8s.io/kubernetes v1.18.6
 	k8s.io/utils v0.0.0-20200821003339-5e75c0163111 // indirect
+	sigs.k8s.io/yaml v1.2.0
 )

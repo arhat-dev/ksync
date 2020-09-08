@@ -1,0 +1,130 @@
+apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.config.ksync.namespaced }}
+kind: Role
+{{- else }}
+kind: ClusterRole
+{{- end }}
+metadata:
+  name: {{ include "ksync.fullname" . }}
+  {{- if .Values.config.ksync.namespaced }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+rules:
+- apiGroups: ["apps"]
+  resources:
+  - deployments
+  - statefulsets
+  - daemonsets
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+- apiGroups: ["apps"]
+  resources:
+  - replicasets
+  verbs:
+  - get
+  - list
+- apiGroups: [""]
+  resources:
+  - configmaps
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+- apiGroups: [""]
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - patch
+  - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.config.ksync.namespaced }}
+kind: RoleBinding
+{{- else }}
+kind: ClusterRoleBinding
+{{- end }}
+metadata:
+  name: {{ include "ksync.fullname" . }}
+  {{- if .Values.config.ksync.namespaced }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  {{- if .Values.config.ksync.namespaced }}
+  kind: Role
+  {{- else }}
+  kind: ClusterRole
+  {{- end }}
+  name: {{ include "ksync.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "ksync.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+---
+# role for leader election
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "ksync.fullname" . }}:leader-election
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups: [""]
+  resources:
+  - events
+  verbs:
+  - create
+{{- if (contains .Values.config.ksync.leaderElection.lock.type "configmaps") }}
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - update
+  resourceNames:
+  - {{ .Values.config.ksync.leaderElection.lock.name | default "ksync-leader-election" }}
+{{- end }}
+{{- if (contains .Values.config.ksync.leaderElection.lock.type "endpoints") }}
+- apiGroups: [""]
+  resources:
+  - endpoints
+  verbs:
+  - get
+  - update
+  resourceNames:
+  - {{ .Values.config.ksync.leaderElection.lock.name | default "ksync-leader-election" }}
+{{- end }}
+{{- if (contains .Values.config.ksync.leaderElection.lock.type "leases") }}
+- apiGroups: ["coordination.k8s.io"]
+  resources:
+  - leases
+  verbs:
+  - get
+  - update
+  resourceNames:
+  - {{ .Values.config.ksync.leaderElection.lock.name | default "ksync-leader-election" }}
+{{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "ksync.fullname" . }}:leader-election
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "ksync.fullname" . }}:leader-election
+subjects:
+- kind: ServiceAccount
+  name: {{ include "ksync.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}

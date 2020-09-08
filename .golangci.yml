@@ -51,7 +51,7 @@ linters-settings:
   gocyclo:
     min-complexity: 30
   goimports:
-    local-prefixes: arhat.dev/template-kubernetes-controller
+    local-prefixes: arhat.dev/ksync
   lll:
     line-length: 120
     # tab width in spaces. Default to 1.
