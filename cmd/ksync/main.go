@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"arhat.dev/ksync/cmd/ksync/pkg"
+	"arhat.dev/ksync/pkg/cmd"
 )
 
 func main() {
-	if err := pkg.NewKsyncCmd().Execute(); err != nil {
+	if err := cmd.NewKsyncCmd().Execute(); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "failed to run ksync: %v", err)
 	}
 }

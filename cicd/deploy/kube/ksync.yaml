@@ -203,7 +203,7 @@ spec:
             readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 1000
-          image: "docker.io/arhatdev/ksync:amd64"
+          image: "docker.io/arhatdev/ksync:latest"
           imagePullPolicy: IfNotPresent
           command:
           - /ksync
