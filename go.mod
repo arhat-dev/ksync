@@ -33,7 +33,7 @@ replace (
 )
 
 require (
-	arhat.dev/pkg v0.0.0-20200814094720-eac4d5d5680b
+	arhat.dev/pkg v0.0.0-20200922193124-416462163776
 	github.com/Masterminds/sprig/v3 v3.1.0
 	github.com/goiiot/libmqtt v0.9.5
 	github.com/itchyny/gojq v0.10.4
