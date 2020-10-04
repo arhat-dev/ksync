@@ -19,6 +19,9 @@ image.build.ksync.linux.x86:
 image.build.ksync.linux.amd64:
 	sh scripts/image/build.sh $@
 
+image.build.ksync.linux.armv5:
+	sh scripts/image/build.sh $@
+
 image.build.ksync.linux.armv6:
 	sh scripts/image/build.sh $@
 
@@ -31,6 +34,9 @@ image.build.ksync.linux.arm64:
 image.build.ksync.linux.ppc64le:
 	sh scripts/image/build.sh $@
 
+image.build.ksync.linux.mips64le:
+	sh scripts/image/build.sh $@
+
 image.build.ksync.linux.s390x:
 	sh scripts/image/build.sh $@
 
@@ -39,9 +45,11 @@ image.build.ksync.linux.all: \
 	image.build.ksync.linux.arm64 \
 	image.build.ksync.linux.armv7 \
 	image.build.ksync.linux.armv6 \
+	image.build.ksync.linux.armv5 \
 	image.build.ksync.linux.x86 \
 	image.build.ksync.linux.s390x \
-	image.build.ksync.linux.ppc64le
+	image.build.ksync.linux.ppc64le \
+	image.build.ksync.linux.mips64le
 
 image.build.ksync.windows.amd64:
 	sh scripts/image/build.sh $@
@@ -60,6 +68,9 @@ image.push.ksync.linux.x86:
 image.push.ksync.linux.amd64:
 	sh scripts/image/push.sh $@
 
+image.push.ksync.linux.armv5:
+	sh scripts/image/push.sh $@
+
 image.push.ksync.linux.armv6:
 	sh scripts/image/push.sh $@
 
@@ -72,6 +83,9 @@ image.push.ksync.linux.arm64:
 image.push.ksync.linux.ppc64le:
 	sh scripts/image/push.sh $@
 
+image.push.ksync.linux.mips64le:
+	sh scripts/image/push.sh $@
+
 image.push.ksync.linux.s390x:
 	sh scripts/image/push.sh $@
 
@@ -80,9 +94,11 @@ image.push.ksync.linux.all: \
 	image.push.ksync.linux.arm64 \
 	image.push.ksync.linux.armv7 \
 	image.push.ksync.linux.armv6 \
+	image.push.ksync.linux.armv5 \
 	image.push.ksync.linux.x86 \
 	image.push.ksync.linux.s390x \
-	image.push.ksync.linux.ppc64le
+	image.push.ksync.linux.ppc64le \
+	image.push.ksync.linux.mips64le
 
 image.push.ksync.windows.amd64:
 	sh scripts/image/push.sh $@

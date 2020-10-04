@@ -29,10 +29,16 @@ ksync.linux.armv7:
 ksync.linux.armv6:
 	sh scripts/build/build.sh $@
 
+ksync.linux.armv5:
+	sh scripts/build/build.sh $@
+
 ksync.linux.x86:
 	sh scripts/build/build.sh $@
 
 ksync.linux.ppc64le:
+	sh scripts/build/build.sh $@
+
+ksync.linux.mips64le:
 	sh scripts/build/build.sh $@
 
 ksync.linux.s390x:
@@ -43,8 +49,10 @@ ksync.linux.all: \
 	ksync.linux.arm64 \
 	ksync.linux.armv7 \
 	ksync.linux.armv6 \
+	ksync.linux.armv5 \
 	ksync.linux.x86 \
 	ksync.linux.ppc64le \
+	ksync.linux.mips64le \
 	ksync.linux.s390x
 
 # windows
