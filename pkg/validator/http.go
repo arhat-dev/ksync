@@ -135,7 +135,7 @@ func NewHTTPValidator(context context.Context, logger log.Interface, config *Con
 		}
 	}
 
-	tlsConfig, err := config.HTTP.Request.TLS.GetTLSConfig()
+	tlsConfig, err := config.HTTP.Request.TLS.GetTLSConfig(false)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load tls config: %w", err)
 	}

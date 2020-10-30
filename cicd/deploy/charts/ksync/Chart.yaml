@@ -1,6 +1,24 @@
 apiVersion: v2
 name: ksync
-description: Ksync chart for Kubernetes
+description: Sync config from external sources to kubernetes with pod reloader
 type: application
+maintainers:
+- name: arhat-dev
+  email: dev@arhat.dev
+keywords:
+- ksync
+- kubernetes
+- secret
+- configmap
+- mqtt
+- http
+- validation
+- config
+- sync
+# icon:
+home: https://github.com/arhat-dev/ksync
+sources:
+- https://github.com/arhat-dev/ksync
+- https://github.com/arhat-dev/helm-charts
 version: 0.1.0
 appVersion: latest

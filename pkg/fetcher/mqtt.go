@@ -100,7 +100,7 @@ func NewMQTTFetcher(ctx context.Context, logger log.Interface, config *Config) (
 	options = append(options, libmqtt.WithKeepalive(uint16(float64(keepalive)/float64(time.Second)), 1.2))
 
 	if config.MQTT.TLS.Enabled {
-		tlsConfig, err := config.MQTT.TLS.GetTLSConfig()
+		tlsConfig, err := config.MQTT.TLS.GetTLSConfig(false)
 		if err != nil {
 			return nil, fmt.Errorf("failed to load tls config: %w", err)
 		}

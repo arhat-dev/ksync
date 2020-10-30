@@ -50,13 +50,13 @@ _do_sync_gopath() {
 }
 
 install_deepcopy_gen() {
-  _install_go_bin "k8s.io/code-generator@v0.18.8" "./cmd/client-gen" "${GOPATH}/bin/client-gen"
-  _install_go_bin "k8s.io/code-generator@v0.18.8" "./cmd/lister-gen" "${GOPATH}/bin/lister-gen"
-  _install_go_bin "k8s.io/code-generator@v0.18.8" "./cmd/informer-gen" "${GOPATH}/bin/informer-gen"
+  _install_go_bin "k8s.io/code-generator@v0.18.10" "./cmd/client-gen" "${GOPATH}/bin/client-gen"
+  _install_go_bin "k8s.io/code-generator@v0.18.10" "./cmd/lister-gen" "${GOPATH}/bin/lister-gen"
+  _install_go_bin "k8s.io/code-generator@v0.18.10" "./cmd/informer-gen" "${GOPATH}/bin/informer-gen"
 }
 
 install_controller_gen() {
-  _install_go_bin "sigs.k8s.io/controller-tools@v0.3.0" "./cmd/controller-gen" "${CONTROLLER_GEN}"
+  _install_go_bin "sigs.k8s.io/controller-tools@v0.4.0" "./cmd/controller-gen" "${CONTROLLER_GEN}"
 }
 
 _do_gen_clients() {
@@ -65,11 +65,10 @@ _do_gen_clients() {
 
   mkdir -p build
 
-  bash "${GOPATH}/pkg/mod/k8s.io/code-generator@v0.18.8/generate-groups.sh" client,lister,informer \
+  bash "${GOPATH}/pkg/mod/k8s.io/code-generator@v0.18.10/generate-groups.sh" client,lister,informer \
     "arhat.dev/ksync/pkg/apis/${group_name}/generated" \
     arhat.dev/ksync/pkg/apis "${group_name}:${group_version}" \
     --go-header-file "$(pwd)/scripts/gen/boilerplate.go.txt" \
-    --plural-exceptions "Maintenance:Maintenance" \
     -v 2 2>&1 | tee build/gen_clients.log | grep -E -e '(Assembling)|(violation)'
 
   rm -rf "./pkg/apis/${group_name}/generated"
@@ -97,7 +96,7 @@ _do_gen_deepcopy() {
 _do_gen_crd_manifests() {
   group_name="$1"
 
-	"${CONTROLLER_GEN}" crd:preserveUnknownFields=true output:dir=./cicd/deploy/charts/ksync/crds/ paths="./pkg/apis/${group_name}/..."
+  "${CONTROLLER_GEN}" crd:preserveUnknownFields=true,crdVersions=v1beta1 output:dir=./cicd/deploy/charts/ksync/crds/ paths="./pkg/apis/${group_name}/..."
 }
 
 gen() {
