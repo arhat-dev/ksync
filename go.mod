@@ -39,7 +39,7 @@ require (
 	github.com/itchyny/gojq v0.11.2
 	github.com/spf13/cobra v1.1.1
 	go.uber.org/multierr v1.6.0
-	golang.org/x/net v0.0.0-20201029221708-28c70e62bb1d
+	golang.org/x/net v0.0.0-20201031054903-ff519b6c9102
 	gopkg.in/yaml.v2 v2.3.0
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776
 	k8s.io/api v0.18.10
