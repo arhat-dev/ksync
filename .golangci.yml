@@ -74,3 +74,7 @@ issues:
   - path: pkg/apis
     linters:
     - lll
+
+  - text: "commentFormatting: put a space between `//` and comment text"
+    linters:
+    - gocritic
