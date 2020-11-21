@@ -2,18 +2,20 @@ package cmd
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"arhat.dev/pkg/envhelper"
+	"arhat.dev/pkg/kubehelper"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/tools/record"
 
-	"arhat.dev/pkg/confhelper"
 	"arhat.dev/pkg/log"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
@@ -121,7 +123,7 @@ func NewKsyncCmd() *cobra.Command {
 	flags.StringSliceVar(&config.Ksync.IgnoredNamespaces, "ignoredNamespaces",
 		nil, "ignore these namespaces when namespaced is true")
 
-	flags.AddFlagSet(confhelper.FlagsForControllerConfig("ksync", "", cliLogConfig, &config.Ksync.ControllerConfig))
+	flags.AddFlagSet(kubehelper.FlagsForControllerConfig("ksync", "", cliLogConfig, &config.Ksync.ControllerConfig))
 
 	return ksyncCmd
 }
@@ -135,12 +137,32 @@ func run(appCtx context.Context, config *conf.KsyncConfig) error {
 		return fmt.Errorf("failed to create kube client from kubeconfig: %w", err)
 	}
 
-	if err = config.Ksync.Metrics.RegisterIfEnabled(appCtx, logger); err != nil {
-		return fmt.Errorf("failed to register metrics controller: %w", err)
+	_, mtHandler, err := config.Ksync.Metrics.CreateIfEnabled(true)
+	if err != nil {
+		return fmt.Errorf("failed to create metrics provider: %w", err)
 	}
 
-	if err = config.Ksync.Tracing.RegisterIfEnabled(appCtx, logger); err != nil {
-		return fmt.Errorf("failed to register tracing controller: %w", err)
+	if mtHandler != nil {
+		mux := http.NewServeMux()
+		mux.Handle(config.Ksync.Metrics.HTTPPath, mtHandler)
+
+		tlsConfig, err2 := config.Ksync.Metrics.TLS.GetTLSConfig(true)
+		if err2 != nil {
+			return fmt.Errorf("failed to get tls config for metrics listener: %w", err2)
+		}
+
+		srv := &http.Server{
+			Handler:   mux,
+			Addr:      config.Ksync.Metrics.Endpoint,
+			TLSConfig: tlsConfig,
+		}
+
+		go func() {
+			err2 = srv.ListenAndServe()
+			if err2 != nil && !errors.Is(err2, http.ErrServerClosed) {
+				panic(err2)
+			}
+		}()
 	}
 
 	logger.I("creating controller")

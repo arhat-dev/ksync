@@ -12,8 +12,8 @@ import (
 	"text/template"
 	"time"
 
-	"arhat.dev/pkg/confhelper"
 	"arhat.dev/pkg/log"
+	"arhat.dev/pkg/tlshelper"
 	"golang.org/x/net/http/httpproxy"
 )
 
@@ -38,12 +38,12 @@ type HTTPConfig struct {
 	ResponseBodyAsData bool `json:"responseBodyAsData" yaml:"responseBodyAsData"`
 
 	Request struct {
-		URLTemplate string               `json:"url" yaml:"url"`
-		Action      string               `json:"action" yaml:"action"`
-		Headers     NameValuePairs       `json:"headers" yaml:"headers"`
-		Proxy       *HTTPProxyConfig     `json:"proxy" yaml:"proxy"`
-		Body        string               `json:"body" yaml:"body"`
-		TLS         confhelper.TLSConfig `json:"tls" yaml:"tls"`
+		URLTemplate string              `json:"url" yaml:"url"`
+		Action      string              `json:"action" yaml:"action"`
+		Headers     NameValuePairs      `json:"headers" yaml:"headers"`
+		Proxy       *HTTPProxyConfig    `json:"proxy" yaml:"proxy"`
+		Body        string              `json:"body" yaml:"body"`
+		TLS         tlshelper.TLSConfig `json:"tls" yaml:"tls"`
 	} `json:"request" yaml:"request"`
 
 	Response struct {

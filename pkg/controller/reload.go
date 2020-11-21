@@ -631,7 +631,7 @@ loopAnnotations:
 				continue
 			}
 
-			envMap := kubecontainer.EnvVarsToMap(envs)
+			envMap := envVarsToMap(envs)
 			for _, mo := range ctr.VolumeMounts {
 				kind := getTriggerKind(mo.Name)
 				if kind == "" {
@@ -667,7 +667,7 @@ loopAnnotations:
 
 	if evalAnnotation {
 		logger.V("resolving annotated triggers")
-		envMap := kubecontainer.EnvVarsToMap(allCtrEnvs)
+		envMap := envVarsToMap(allCtrEnvs)
 		for k, v := range podOwnerMetadata.GetAnnotations() {
 			var kind configKind
 			switch k {
@@ -738,4 +738,14 @@ loopAnnotations:
 	}
 
 	return triggers, nil
+}
+
+// envVarsToMap constructs a map of environment name to value from a slice
+// of env vars.
+func envVarsToMap(envs []kubecontainer.EnvVar) map[string]string {
+	result := map[string]string{}
+	for _, env := range envs {
+		result[env.Name] = env.Value
+	}
+	return result
 }

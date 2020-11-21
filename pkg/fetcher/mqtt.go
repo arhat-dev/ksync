@@ -7,8 +7,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"arhat.dev/pkg/confhelper"
 	"arhat.dev/pkg/log"
+	"arhat.dev/pkg/tlshelper"
 
 	"github.com/goiiot/libmqtt"
 )
@@ -30,7 +30,7 @@ type MQTTConfig struct {
 	Version           string        `json:"version" yaml:"version"`
 	KeepaliveInterval time.Duration `json:"keepaliveInterval" yaml:"keepaliveInterval"`
 
-	TLS confhelper.TLSConfig `json:"tls" yaml:"tls"`
+	TLS tlshelper.TLSConfig `json:"tls" yaml:"tls"`
 
 	Subscriptions []MQTTSubscriptionConfig `json:"subscriptions" yaml:"subscriptions"`
 }

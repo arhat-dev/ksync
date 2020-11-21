@@ -8,6 +8,7 @@ import (
 
 	"arhat.dev/pkg/backoff"
 	"arhat.dev/pkg/envhelper"
+	"arhat.dev/pkg/kubehelper"
 	"arhat.dev/pkg/log"
 	"arhat.dev/pkg/queue"
 	"arhat.dev/pkg/reconcile"
@@ -202,7 +203,7 @@ func NewController(appCtx context.Context, config *conf.KsyncConfig) (*Controlle
 		return &reconcile.Result{NextAction: queue.ActionUpdate}
 	}
 
-	ctrl.cmRec = reconcile.NewKubeInformerReconciler(ctrlCtx, cmInformer, reconcile.Options{
+	ctrl.cmRec = kubehelper.NewKubeInformerReconciler(ctrlCtx, cmInformer, reconcile.Options{
 		Logger:       log.Log.WithName("conf:cm"),
 		RequireCache: true,
 		Handlers: reconcile.HandleFuncs{
@@ -213,7 +214,7 @@ func NewController(appCtx context.Context, config *conf.KsyncConfig) (*Controlle
 		},
 	})
 
-	ctrl.secretRec = reconcile.NewKubeInformerReconciler(ctrlCtx, secretInformer, reconcile.Options{
+	ctrl.secretRec = kubehelper.NewKubeInformerReconciler(ctrlCtx, secretInformer, reconcile.Options{
 		Logger:       log.Log.WithName("conf:secrets"),
 		RequireCache: true,
 		Handlers: reconcile.HandleFuncs{
@@ -224,7 +225,7 @@ func NewController(appCtx context.Context, config *conf.KsyncConfig) (*Controlle
 		},
 	})
 
-	ctrl.deployRec = reconcile.NewKubeInformerReconciler(ctrlCtx, deployInformer, reconcile.Options{
+	ctrl.deployRec = kubehelper.NewKubeInformerReconciler(ctrlCtx, deployInformer, reconcile.Options{
 		Logger:       log.Log.WithName("reload:deploy"),
 		RequireCache: true,
 		Handlers: reconcile.HandleFuncs{
@@ -235,7 +236,7 @@ func NewController(appCtx context.Context, config *conf.KsyncConfig) (*Controlle
 		},
 	})
 
-	ctrl.dsRec = reconcile.NewKubeInformerReconciler(ctrlCtx, dsInformer, reconcile.Options{
+	ctrl.dsRec = kubehelper.NewKubeInformerReconciler(ctrlCtx, dsInformer, reconcile.Options{
 		Logger:       log.Log.WithName("reload:ds"),
 		RequireCache: true,
 		Handlers: reconcile.HandleFuncs{
@@ -246,7 +247,7 @@ func NewController(appCtx context.Context, config *conf.KsyncConfig) (*Controlle
 		},
 	})
 
-	ctrl.stsRec = reconcile.NewKubeInformerReconciler(ctrlCtx, stsInformer, reconcile.Options{
+	ctrl.stsRec = kubehelper.NewKubeInformerReconciler(ctrlCtx, stsInformer, reconcile.Options{
 		Logger:       log.Log.WithName("reload:sts"),
 		RequireCache: true,
 		Handlers: reconcile.HandleFuncs{
@@ -257,7 +258,7 @@ func NewController(appCtx context.Context, config *conf.KsyncConfig) (*Controlle
 		},
 	})
 
-	ctrl.podRec = reconcile.NewKubeInformerReconciler(ctrlCtx, podInformer, reconcile.Options{
+	ctrl.podRec = kubehelper.NewKubeInformerReconciler(ctrlCtx, podInformer, reconcile.Options{
 		Logger:       log.Log.WithName("reload:pod"),
 		RequireCache: true,
 		Handlers: reconcile.HandleFuncs{
@@ -329,13 +330,13 @@ type Controller struct {
 	reconcilesStart   []func() error
 	reconcileUntil    []func(<-chan struct{})
 
-	cmRec     *reconcile.KubeInformerReconciler
-	secretRec *reconcile.KubeInformerReconciler
+	cmRec     *kubehelper.KubeInformerReconciler
+	secretRec *kubehelper.KubeInformerReconciler
 
-	deployRec *reconcile.KubeInformerReconciler
-	dsRec     *reconcile.KubeInformerReconciler
-	stsRec    *reconcile.KubeInformerReconciler
-	podRec    *reconcile.KubeInformerReconciler
+	deployRec *kubehelper.KubeInformerReconciler
+	dsRec     *kubehelper.KubeInformerReconciler
+	stsRec    *kubehelper.KubeInformerReconciler
+	podRec    *kubehelper.KubeInformerReconciler
 
 	dsInformer     kubecache.SharedIndexInformer
 	deployInformer kubecache.SharedIndexInformer

@@ -19,7 +19,7 @@ package conf
 import (
 	"time"
 
-	"arhat.dev/pkg/confhelper"
+	"arhat.dev/pkg/kubehelper"
 )
 
 type KsyncConfig struct {
@@ -27,7 +27,7 @@ type KsyncConfig struct {
 }
 
 type KsyncAppConfig struct {
-	confhelper.ControllerConfig `json:",inline" yaml:",inline"`
+	kubehelper.ControllerConfig `json:",inline" yaml:",inline"`
 
 	Namespaced        bool          `json:"namespaced" yaml:"namespaced"`
 	ReloadDelay       time.Duration `json:"reloadDelay" yaml:"reloadDelay"`
